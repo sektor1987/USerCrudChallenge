@@ -31,7 +31,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             try
             {
                 var client_ = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-                var table = Table.LoadTable(client_, "Users");
+                var table = Table.LoadTable(client_, "TblUsers");
                 var context = new DynamoDBContext(client_);
                 var result = await table.PutItemAsync(context.ToDocument(user));
 
@@ -50,13 +50,12 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             try
             {
                 var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-
                 UpdateItemRequest updateRequest = new UpdateItemRequest()
                 {
-                    TableName = "Users",
+                    TableName = "TblUsers",
                     Key = new Dictionary<string, AttributeValue>
                 {
-                    {"UserName", new AttributeValue {S = user.UserName } }
+                    {"Name", new AttributeValue {S = user.Name } }
                 },
                     AttributeUpdates = new Dictionary<string, AttributeValueUpdate>
                 {
@@ -68,7 +67,22 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
                     }
                 }
                 };
+                //var updreq = new UpdateItemRequest()
+                //{
+                //    TableName = "TblUsers",
+                //    Key = new Dictionary<string, AttributeValue> { { "Name", new AttributeValue { S = user.Name } } },
+                //    ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+                //{
+                //    { ":Email", new AttributeValue{ S = user.Email }}
+                //},
+                //    ExpressionAttributeNames = new Dictionary<string, string>
+                //{
+                //    { "#email", "Email"}
+                //},
+                //    UpdateExpression = "SET #email = :Email"
+                //};
 
+                //await client.UpdateItemAsync(updreq);
 
                 await client.UpdateItemAsync(updateRequest);
 
@@ -88,7 +102,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             try
             {
                 var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-                var table = Table.LoadTable(client, "Users");
+                var table = Table.LoadTable(client, "TblUsers");
                 var result = await table.GetItemAsync(userId);
                 return MapUserWithPassword(result);
             }
@@ -101,23 +115,38 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         public async Task<User> FindUserByUserName(string username)
         {
-            var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-
-            var query = new QueryRequest
+            try
             {
-                TableName = "Users",
-                KeyConditionExpression = "UserName = :username",
-                ExpressionAttributeValues = new Dictionary<string, AttributeValue> { { ":username", new AttributeValue { S = username } } }
-            };
+                var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
 
-            var result = await client.QueryAsync(query);
+                var qry = new QueryRequest
+                {
+                    TableName = "TblUsers",
+                    ExpressionAttributeNames = new Dictionary<string, string>
+                    {
+                      { "#Name", "Name" }
+                    },
+                    ExpressionAttributeValues = new Dictionary<string, AttributeValue> { { ":name", new AttributeValue { S = username } } },
+                    KeyConditionExpression = "#Name = :name",
+                };
 
-            if (result.Count == 0)
+                var result = await client.QueryAsync(qry);
+
+                if (result.Count == 0 || result is null)
+                {
+                    throw new Exception("No user");
+                }
+
+
+
+                return UsersMapper(result.Items.FirstOrDefault());
+            }
+            catch (Exception ex)
             {
-                throw new Exception("NO exist!!");
+
+                throw;
             }
 
-            return UsersMapper(result.Items.FirstOrDefault());
         }
 
         public async Task<bool> DeleteUserAsync(string username)
@@ -128,8 +157,8 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
                 var request = new DeleteItemRequest
                 {
-                    TableName = "Users",
-                    Key = new Dictionary<string, AttributeValue> { { "UserName", new AttributeValue { S = username } } }
+                    TableName = "TblUsers",
+                    Key = new Dictionary<string, AttributeValue> { { "Name", new AttributeValue { S = username } } }
                 };
 
                 await client.DeleteItemAsync(request);
@@ -148,7 +177,6 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
         private User MapUserWithPassword(Document document)
         {
             var user = new User(document["UserId"], document["UserName"], string.Empty, document["Email"]);
-
             return user;
         }
 
@@ -157,7 +185,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
             try
             {
-                var user = new User(item["Id"].S, item["UserName"].S, item["Password"].S, item["Email"].S);
+                var user = new User(item["Id"].S, item["Name"].S, item["Password"].S, item["Email"].S);
 
                 return user;
             }

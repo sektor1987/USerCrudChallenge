@@ -22,7 +22,7 @@ namespace UserCrudApiChallenge.Application.Main
             User user = new();
             Guid guid = new();
             user.Id = guid.ToString();
-            user.UserName = userDto.UserName;
+            user.Name = userDto.Name;
             user.Email = userDto.Email;
             user.Password = userDto.Password;
             var user_ = await _userDomain.AddUserAsync(user);
@@ -31,7 +31,7 @@ namespace UserCrudApiChallenge.Application.Main
         }
         public async Task<bool> UpdateUserAsync(UserDTO userDto) {
             User user = new();
-            user.UserName = userDto.UserName;
+            user.Name = userDto.Name;
             user.Email = userDto.Email;
             user.Password = userDto.Password;
             return await _userDomain.UpdateUserAsync(user);
