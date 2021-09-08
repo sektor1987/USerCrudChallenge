@@ -1,0 +1,20 @@
+[Oo]bj/
+[Bb]in/
+artifacts/
+reports/
+.vs
+.vscode
+*.user
+~*.docx
+
+# Other
+*.bin
+*.db
+
+# Simulator files
+*.bin
+*.inf
+*.jpg
+/wwwroot/image_repo/
+lists/
+*.g.cs

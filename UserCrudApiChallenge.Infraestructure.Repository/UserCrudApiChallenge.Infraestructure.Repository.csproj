@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.62" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\3.UserCrudApiChallenge.Domain.Entity\UserCrudApiChallenge.Domain.Entity.csproj" />
+    <ProjectReference Include="..\4.UserCrudApiChallenge.Infraestructure.Interface\4.UserCrudApiChallenge.Infraestructure.Interface.csproj" />
+    <ProjectReference Include="..\5.UserCrudApiChallenge.CrossCutting.User\5.UserCrudApiChallenge.CrossCutting.User.csproj" />
+  </ItemGroup>
+
+</Project>
