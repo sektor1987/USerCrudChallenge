@@ -13,7 +13,7 @@ namespace UserCrudApiChallenge.Application.Interface
             Task<bool> UpdateUserAsync(UserDTO user);
             Task<User> FindUserByIdAsync(string userId);
             Task<bool> DeleteUserAsync(string username);
-            Task<User> FindUserByUserName(string username);
+            Task<UserDTO> FindUserByUserName(string username);
             Task<List<UserDTO>> GetUsers();
         }
     

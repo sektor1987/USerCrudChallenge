@@ -17,6 +17,7 @@ using UserCrudApiChallenge.Domain.Core;
 using UserCrudApiChallenge.Domain.Interface;
 using UserCrudApiChallenge.Infraestructure.Interface;
 using UserCrudApiChallenge.Infraestructure.Repository;
+using UserCrudChallenge.CrossCutting.Common;
 
 namespace UserCrudApiChallenge.Application.WebApi.Modules.Injection
 {
@@ -32,7 +33,7 @@ namespace UserCrudApiChallenge.Application.WebApi.Modules.Injection
 
 
             //services.AddSingleton<IConnectionFactory, ConnectionFactory>();
-            //services.AddScoped<IManagerEncryptDecrypt, ManagerEncryptDecrypt>();
+            services.AddScoped<IManagerEncryptDecrypt, ManagerEncryptDecrypt>();
 
             //services.AddScoped<ICommonApplication, CommonApplication>();
             //services.AddScoped<ICommonDomain, CommonDomain>();

@@ -45,13 +45,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCrudApiChallenge.Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCrudApiChallenge.Domain.Core", "UserCrudApiChallenge.Domain.Core\UserCrudApiChallenge.Domain.Core.csproj", "{7669E040-9C6D-4A91-B788-A65FF36F2CD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrudApiChallenge.Application.Interface", "UserCrudApiChallenge.Application.Interface\UserCrudApiChallenge.Application.Interface.csproj", "{714CF215-38BB-4BD3-A8A3-0E1553FF917C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCrudApiChallenge.Application.Interface", "UserCrudApiChallenge.Application.Interface\UserCrudApiChallenge.Application.Interface.csproj", "{714CF215-38BB-4BD3-A8A3-0E1553FF917C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrudApiChallenge.Application.Main", "UserCrudApiChallenge.Application.Main\UserCrudApiChallenge.Application.Main.csproj", "{F672494B-A5E6-4EE0-A6C7-32DDD959B505}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCrudApiChallenge.Application.Main", "UserCrudApiChallenge.Application.Main\UserCrudApiChallenge.Application.Main.csproj", "{F672494B-A5E6-4EE0-A6C7-32DDD959B505}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrudApiChallenge.Application.DTO", "UserCrudApiChallenge.Application.DTO\UserCrudApiChallenge.Application.DTO.csproj", "{0B53B1EC-56D9-41E6-83AF-2356C688954D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCrudApiChallenge.Application.DTO", "UserCrudApiChallenge.Application.DTO\UserCrudApiChallenge.Application.DTO.csproj", "{0B53B1EC-56D9-41E6-83AF-2356C688954D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrudApi", "UserCrudApi\UserCrudApi.csproj", "{A01F93A0-2AEB-41CA-A43D-84E059D70798}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserCrudApi", "UserCrudApi\UserCrudApi.csproj", "{A01F93A0-2AEB-41CA-A43D-84E059D70798}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrudChallenge.CrossCutting.Common", "UserCrudChallenge.CrossCutting.Common\UserCrudChallenge.CrossCutting.Common.csproj", "{C34778C6-A226-4013-A548-0C4ED2FBB20C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +105,10 @@ Global
 		{A01F93A0-2AEB-41CA-A43D-84E059D70798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A01F93A0-2AEB-41CA-A43D-84E059D70798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A01F93A0-2AEB-41CA-A43D-84E059D70798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C34778C6-A226-4013-A548-0C4ED2FBB20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C34778C6-A226-4013-A548-0C4ED2FBB20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C34778C6-A226-4013-A548-0C4ED2FBB20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C34778C6-A226-4013-A548-0C4ED2FBB20C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,6 +134,7 @@ Global
 		{F672494B-A5E6-4EE0-A6C7-32DDD959B505} = {15AB3034-9712-4563-A08E-1E5C14A58C84}
 		{0B53B1EC-56D9-41E6-83AF-2356C688954D} = {D40FF6CC-3507-4892-9575-D242EAFB8BFA}
 		{A01F93A0-2AEB-41CA-A43D-84E059D70798} = {E0F99FD6-A8C0-4384-AC63-6BF8C4745785}
+		{C34778C6-A226-4013-A548-0C4ED2FBB20C} = {C2242A7E-4C80-4F08-BBC8-04D496E4D394}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {515B87D9-BC91-4412-8432-8560DC8C796C}

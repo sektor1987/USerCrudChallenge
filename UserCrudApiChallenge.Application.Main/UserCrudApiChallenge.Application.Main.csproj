@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UserCrudApiChallenge.Application.Interface\UserCrudApiChallenge.Application.Interface.csproj" />
     <ProjectReference Include="..\UserCrudApiChallenge.Domain.Interface\UserCrudApiChallenge.Domain.Interface.csproj" />
+    <ProjectReference Include="..\UserCrudChallenge.CrossCutting.Common\UserCrudChallenge.CrossCutting.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,26 +6,28 @@ using UserCrudApiChallenge.Domain;
 using UserCrudApiChallenge.Domain.Interface;
 using UserCrudApiChallenge.Application.DTO;
 using System.Collections.Generic;
+using UserCrudChallenge.CrossCutting.Common;
 
 namespace UserCrudApiChallenge.Application.Main
 {
     public class UserApplication : IUserAplication
     {
         private readonly IUserDomain _userDomain;
-
-        public UserApplication(IUserDomain userDomain)
+        private IManagerEncryptDecrypt _managerEncryptDecrypt;
+        public UserApplication(IUserDomain userDomain, IManagerEncryptDecrypt managerEncryptDecrypt)
         {
             _userDomain = userDomain;
+            _managerEncryptDecrypt = managerEncryptDecrypt;
+
         }
 
         public async Task<UserDTO> AddUserAsync(UserDTO userDto) {
 
             User user = new();
             Guid guid = new();
-            user.Id = guid.ToString();
             user.Name = userDto.Name;
             user.Email = userDto.Email;
-            user.Password = userDto.Password;
+            user.Password = _managerEncryptDecrypt.Encrypt(userDto.Password);
             User user_ = await _userDomain.AddUserAsync(user);
             return userDto;
 
@@ -34,7 +36,7 @@ namespace UserCrudApiChallenge.Application.Main
             User user = new();
             user.Name = userDto.Name;
             user.Email = userDto.Email;
-            user.Password = userDto.Password;
+            user.Password = _managerEncryptDecrypt.Encrypt(userDto.Password);
             return await _userDomain.UpdateUserAsync(user);
             
         }
@@ -46,9 +48,14 @@ namespace UserCrudApiChallenge.Application.Main
             return await _userDomain.DeleteUserAsync(username);
 
         }
-        public async Task<User> FindUserByUserName(string username) {
-            return await _userDomain.FindUserByUserName(username);
-
+        public async Task<UserDTO> FindUserByUserName(string username) {
+#warning falta validar si es null
+            Task<User> userEntity =  _userDomain.FindUserByUserName(username);
+            UserDTO userDTO = new();
+            userDTO.Name = userEntity.Result.Name;
+            userDTO.Password = _managerEncryptDecrypt.Decrypt(userEntity.Result.Password);
+            userDTO.Email = userEntity.Result.Email;
+            return userDTO;
         }
 
         public async Task<List<UserDTO>> GetUsers()
@@ -61,7 +68,7 @@ namespace UserCrudApiChallenge.Application.Main
             {
                 UserDTO userDTO = new();
                 userDTO.Name = user.Name;
-                userDTO.Password = user.Password;
+                userDTO.Password = _managerEncryptDecrypt.Decrypt(user.Password);
                 userDTO.Email = user.Email;
                 lstUserDto.Add(userDTO);
             }

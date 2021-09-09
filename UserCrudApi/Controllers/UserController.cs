@@ -60,7 +60,7 @@ namespace UserCrudApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         [Route("{name}")]
         public async Task<IActionResult> FindUsersByName(string name)
         {

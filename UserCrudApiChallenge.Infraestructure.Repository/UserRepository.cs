@@ -64,6 +64,12 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
                             Value = new AttributeValue{ S =  user.Email },
                             Action = AttributeAction.PUT
                         }
+                    },
+                     {"Password", new AttributeValueUpdate
+                        {
+                            Value = new AttributeValue{ S =  user.Password },
+                            Action = AttributeAction.PUT
+                        }
                     }
                 }
                 };
@@ -200,7 +206,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         private User MapUserWithPassword(Document document)
         {
-            User user = new User(document["UserId"], document["UserName"], string.Empty, document["Email"]);
+            User user = new User(document["Name"], string.Empty, document["Email"]);
             return user;
         }
 
@@ -209,7 +215,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
             try
             {
-                User user = new User(item["Id"].S, item["Name"].S, item["Password"].S, item["Email"].S);
+                User user = new User(item["Name"].S, item["Password"].S, item["Email"].S);
 
                 return user;
             }
