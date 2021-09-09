@@ -30,10 +30,10 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
         {
             try
             {
-                var client_ = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-                var table = Table.LoadTable(client_, "TblUsers");
-                var context = new DynamoDBContext(client_);
-                var result = await table.PutItemAsync(context.ToDocument(user));
+                AmazonDynamoDBClient client_ = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+                Table table = Table.LoadTable(client_, "TblUsers");
+                DynamoDBContext context = new DynamoDBContext(client_);
+                Document result = await table.PutItemAsync(context.ToDocument(user));
 
                 return user;
             }
@@ -49,7 +49,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
         {
             try
             {
-                var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+                AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
                 UpdateItemRequest updateRequest = new UpdateItemRequest()
                 {
                     TableName = "TblUsers",
@@ -101,9 +101,9 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
             try
             {
-                var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-                var table = Table.LoadTable(client, "TblUsers");
-                var result = await table.GetItemAsync(userId);
+                AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+                Table table = Table.LoadTable(client, "TblUsers");
+                Document result = await table.GetItemAsync(userId);
                 return MapUserWithPassword(result);
             }
             catch (Exception ex)
@@ -117,9 +117,9 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
         {
             try
             {
-                var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+                AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
 
-                var qry = new QueryRequest
+                QueryRequest qry = new QueryRequest
                 {
                     TableName = "TblUsers",
                     ExpressionAttributeNames = new Dictionary<string, string>
@@ -149,13 +149,37 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         }
 
+
+
+        public async Task<List<User>> GetUsers()
+        {
+            try
+            {
+                AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+
+                DynamoDBContext context = new DynamoDBContext(client);
+                Table table = Table.LoadTable(client, "TblUsers");
+
+                //get all records
+                var conditions = new List<ScanCondition>();
+                // you can add scan conditions, or leave empty
+                List<User> allUsers = await context.ScanAsync<User>(conditions).GetRemainingAsync();
+                return allUsers;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
         public async Task<bool> DeleteUserAsync(string username)
         {
             try
             {
-                var client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+                AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
 
-                var request = new DeleteItemRequest
+                DeleteItemRequest request = new DeleteItemRequest
                 {
                     TableName = "TblUsers",
                     Key = new Dictionary<string, AttributeValue> { { "Name", new AttributeValue { S = username } } }
@@ -176,7 +200,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         private User MapUserWithPassword(Document document)
         {
-            var user = new User(document["UserId"], document["UserName"], string.Empty, document["Email"]);
+            User user = new User(document["UserId"], document["UserName"], string.Empty, document["Email"]);
             return user;
         }
 
@@ -185,7 +209,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
             try
             {
-                var user = new User(item["Id"].S, item["Name"].S, item["Password"].S, item["Email"].S);
+                User user = new User(item["Id"].S, item["Name"].S, item["Password"].S, item["Email"].S);
 
                 return user;
             }

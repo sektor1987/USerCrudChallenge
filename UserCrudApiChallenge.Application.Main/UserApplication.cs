@@ -5,6 +5,7 @@ using UserCrudApiChallenge.Domain.Entity;
 using UserCrudApiChallenge.Domain;
 using UserCrudApiChallenge.Domain.Interface;
 using UserCrudApiChallenge.Application.DTO;
+using System.Collections.Generic;
 
 namespace UserCrudApiChallenge.Application.Main
 {
@@ -25,7 +26,7 @@ namespace UserCrudApiChallenge.Application.Main
             user.Name = userDto.Name;
             user.Email = userDto.Email;
             user.Password = userDto.Password;
-            var user_ = await _userDomain.AddUserAsync(user);
+            User user_ = await _userDomain.AddUserAsync(user);
             return userDto;
 
         }
@@ -49,5 +50,24 @@ namespace UserCrudApiChallenge.Application.Main
             return await _userDomain.FindUserByUserName(username);
 
         }
+
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            List<UserDTO> lstUserDto = new();
+#warning falta un mapeo mas elegante entre el DTO y la Entity, por falta de tiempo lo dejamos así
+            Task<List<User>> lstUsers = _userDomain.GetUsers();
+
+            foreach (User user in await lstUsers)
+            {
+                UserDTO userDTO = new();
+                userDTO.Name = user.Name;
+                userDTO.Password = user.Password;
+                userDTO.Email = user.Email;
+                lstUserDto.Add(userDTO);
+            }
+
+            return lstUserDto;
+        }
+
     }
 }

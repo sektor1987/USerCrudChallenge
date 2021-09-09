@@ -36,5 +36,13 @@ namespace UserCrudApiChallenge.Domain.Core
             User result = await _userRepository.FindUserByUserName(username);
             return result;
         }
+
+        public async Task<List<User>> GetUsers()
+        {
+            List<User> result = await _userRepository.GetUsers();
+            return result;
+
+        }
+
     }
 }
