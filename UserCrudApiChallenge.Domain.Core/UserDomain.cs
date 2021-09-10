@@ -28,12 +28,13 @@ namespace UserCrudApiChallenge.Domain.Core
             User result = await _userRepository.FindUserByIdAsync(userId);
             return result;
         }
-        public async Task<bool> DeleteUserAsync(string username) {
-            bool result = await _userRepository.DeleteUserAsync(username);
+        public async Task<bool> DeleteUserAsync(string id) {
+            bool result = await _userRepository.DeleteUserAsync(id);
             return result;
         }
-        public async Task<User> FindUserByUserName(string username) {
-            User result = await _userRepository.FindUserByUserName(username);
+        public async Task<User> FindUserById(string id)
+        {
+            User result = await _userRepository.FindUserById(id);
             return result;
         }
 

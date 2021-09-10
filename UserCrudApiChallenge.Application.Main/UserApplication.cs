@@ -24,7 +24,8 @@ namespace UserCrudApiChallenge.Application.Main
         public async Task<UserDTO> AddUserAsync(UserDTO userDto) {
 
             User user = new();
-            Guid guid = new();
+            Guid guid = Guid.NewGuid();
+            user.Id = guid.ToString();
             user.Name = userDto.Name;
             user.Email = userDto.Email;
             user.Password = _managerEncryptDecrypt.Encrypt(userDto.Password);
@@ -34,6 +35,7 @@ namespace UserCrudApiChallenge.Application.Main
         }
         public async Task<bool> UpdateUserAsync(UserDTO userDto) {
             User user = new();
+            user.Id = userDto.Id;
             user.Name = userDto.Name;
             user.Email = userDto.Email;
             user.Password = _managerEncryptDecrypt.Encrypt(userDto.Password);
@@ -44,14 +46,16 @@ namespace UserCrudApiChallenge.Application.Main
             return await _userDomain.FindUserByIdAsync(userId);
 
         }
-        public async Task<bool> DeleteUserAsync(string username) {
-            return await _userDomain.DeleteUserAsync(username);
+        public async Task<bool> DeleteUserAsync(string id) {
+            return await _userDomain.DeleteUserAsync(id);
 
         }
-        public async Task<UserDTO> FindUserByUserName(string username) {
+        public async Task<UserDTO> FindUserById(string id)
+        {
 #warning falta validar si es null
-            Task<User> userEntity =  _userDomain.FindUserByUserName(username);
+            Task<User> userEntity =  _userDomain.FindUserById(id);
             UserDTO userDTO = new();
+            userDTO.Id = userEntity.Result.Id;
             userDTO.Name = userEntity.Result.Name;
             userDTO.Password = _managerEncryptDecrypt.Decrypt(userEntity.Result.Password);
             userDTO.Email = userEntity.Result.Email;
@@ -68,6 +72,7 @@ namespace UserCrudApiChallenge.Application.Main
             {
                 UserDTO userDTO = new();
                 userDTO.Name = user.Name;
+                userDTO.Id = user.Id;
                 userDTO.Password = _managerEncryptDecrypt.Decrypt(user.Password);
                 userDTO.Email = user.Email;
                 lstUserDto.Add(userDTO);

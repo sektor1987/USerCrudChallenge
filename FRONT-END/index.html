@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Consuming API with Vue</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app" class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="price">Email:</label>
+                    <input id="price" v-model="User.email" placeholder="Email" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="rate">Password:</label>
+                    <input id="rate" v-model="User.password" placeholder="Password" type="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button @click="login()" class="btn btn-success">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="px-2 py-2 fixed-bottom bg-dark">
+        <span class="text-muted">REST API consume with Vue and JavaScript by
+            <a class="text-white" href="//github.com/sektor1987/USerCrudChallenge">Camilo Ortuzar</a>
+            &nbsp;|&nbsp;
+            <a target="_blank" class="text-white" href="https://github.com/sektor1987/USerCrudChallenge/">
+                View source
+            </a>
+        </span>
+    </footer>
+</body>
+
+<script src="js/menu.js"></script>
+<script src="js/vue.min.js"></script>
+<script src="js/vue-toasted.min.js"></script>
+<script src="js/index.js"></script>
+
+</html>

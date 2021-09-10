@@ -6,18 +6,19 @@ using System.Text.RegularExpressions;
 
 namespace UserCrudApiChallenge.Domain.Entity
 {
-    [DynamoDBTable("TblUsers")]
+    [DynamoDBTable("TblUsers_")]
     public class User
     {
         [DynamoDBHashKey]
+        public string Id { get; set; }
         public string Name { get; set; }
         //[DynamoDBRangeKey]
         public string Password { get;  set; }
         public string Email { get;  set; }
 
-        public User(string userName, string password, string email)
-        { 
- 
+        public User(string id, string userName, string password, string email)
+        {
+            Id = id;
             Name = userName;
             Password = password;
             Email = email;

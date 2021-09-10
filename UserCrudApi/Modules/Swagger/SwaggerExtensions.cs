@@ -22,49 +22,21 @@ namespace UserCrudApiChallenge.WebApi.Modules.Swagger
                 c.SwaggerDoc("V1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Kapsch Technology Services API Comunes SOR",
+                    Title = "API DOCUMENTATION",
                     Description = "Especificaciones ",
-                    TermsOfService = new Uri("https://www.kapsch.net/terms"),
                     Contact = new OpenApiContact
                     {
-                        Name = "Kapsch Chile",
-                        Email = "kapsch@kapsch.net",
-                        Url = new Uri("https://www.kapsch.net/contact")
+                        Name = "Camilo Ortuzar",
+                        Email = "camilo.ortuzar@outlook.com",
+                        Url = new Uri("https://github.com/sektor1987/USerCrudChallenge")
 
                     },
                     License = new OpenApiLicense
                     {
-                        Name = "Uso exclusivo kapach chile",
-                        Url = new Uri("https://www.kapsch.net/licence")
+                        Name = "Uso exclusivo",
+                        Url = new Uri("https://github.com/sektor1987/USerCrudChallenge")
                     }
                 });
-                //c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml ";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
-                //MyBaseClass myBase = new MyBaseClass();
-
-                //var basePath = AppContext.BaseDirectory;
-                //var assemblyName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
-                //var fileName = System.IO.Path.GetFileName(assemblyName + ".xml");
-
-                //c.IncludeXmlComments(Path.Combine(
-                //            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"{myBase.GetType().Assembly.GetName().Name}.xml"));
-
-                //Assembly.GetExecutingAssembly().GetReferencedAssemblies();
-
-                //// Recopilar todas las rutas de archivo de documentos XML de salida de proyectos referenciados  
-                //var currentAssembly = Assembly.GetExecutingAssembly();
-                //var xmlDocs = currentAssembly.GetReferencedAssemblies()
-                //.Union(new AssemblyName[] { currentAssembly.GetName() })
-                //.Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
-                //.Where(f => File.Exists(f)).ToArray();
-
-                //Array.ForEach(xmlDocs, (d) =>
-                //{
-                //    c.IncludeXmlComments(d);
-                //});
-
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

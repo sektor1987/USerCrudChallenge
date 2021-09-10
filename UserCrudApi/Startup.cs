@@ -16,7 +16,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserCrudApiChallenge.Application.WebApi.Modules.Injection;
-using UserCrudApiChallenge.WebApi.Modules.Authentication;
 using UserCrudApiChallenge.WebApi.Modules.Feature;
 using UserCrudApiChallenge.WebApi.Modules.Mapper;
 using UserCrudApiChallenge.WebApi.Modules.Swagger;
@@ -61,7 +60,8 @@ namespace UserCrudApi
                   ValidateIssuer = false,
                   ValidateAudience = false,
                   ValidateLifetime = true,
-                  ClockSkew = TimeSpan.Zero,
+                  //ClockSkew = TimeSpan.Zero, //Quitamos los 5 min x defecto
+                  ClockSkew = TimeSpan.FromSeconds(100000)
               };
           });
 
@@ -83,7 +83,7 @@ namespace UserCrudApi
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/V1/swagger.json", "API UserCRUD Web Seguridad V1");
+                c.SwaggerEndpoint("/swagger/V1/swagger.json", "API UserCRUD Web V1");
 
             });
 

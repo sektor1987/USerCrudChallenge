@@ -12,8 +12,8 @@ namespace UserCrudApiChallenge.Application.Interface
             Task<UserDTO> AddUserAsync(UserDTO userDto);
             Task<bool> UpdateUserAsync(UserDTO user);
             Task<User> FindUserByIdAsync(string userId);
-            Task<bool> DeleteUserAsync(string username);
-            Task<UserDTO> FindUserByUserName(string username);
+            Task<bool> DeleteUserAsync(string id);
+            Task<UserDTO> FindUserById(string id);
             Task<List<UserDTO>> GetUsers();
         }
     

@@ -1,16 +1,6 @@
-﻿//using Kapsch.Sor.Application.Interface;
-//using Kapsch.Sor.Application.Main;
-//using Kapsch.Sor.CrossCutting.AD;
-//using Kapsch.Sor.Domain.Core;
-//using Kapsch.Sor.Domain.Interface;
-//using Kapsch.Sor.Infrastructure.Data;
-//using Kapsch.Sor.Infrastructure.Interface;
-//using Kapsch.Sor.Infrastructure.Repository;
-//using Kapsch.Sor.CrossCutting.Common;
-//using Kapsch.Sor.CrossCutting.Logging;
+﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using Kapsch.Sor.Services.WebApi.Helpers;
 using UserCrudApiChallenge.Application.Interface;
 using UserCrudApiChallenge.Application.Main;
 using UserCrudApiChallenge.Domain.Core;

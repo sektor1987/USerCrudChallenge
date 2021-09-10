@@ -19,7 +19,7 @@ namespace Auth.Demo
     {
         IDictionary<string, string> users = new Dictionary<string, string>
         {
-            { "test1", "password1" },
+            { "test@test.cl", "123" },
             { "test2", "password2" }
         };
 

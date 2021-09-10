@@ -31,7 +31,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             try
             {
                 AmazonDynamoDBClient client_ = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-                Table table = Table.LoadTable(client_, "TblUsers");
+                Table table = Table.LoadTable(client_, "TblUsers_");
                 DynamoDBContext context = new DynamoDBContext(client_);
                 Document result = await table.PutItemAsync(context.ToDocument(user));
 
@@ -52,13 +52,19 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
                 AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
                 UpdateItemRequest updateRequest = new UpdateItemRequest()
                 {
-                    TableName = "TblUsers",
+                    TableName = "TblUsers_",
                     Key = new Dictionary<string, AttributeValue>
                 {
-                    {"Name", new AttributeValue {S = user.Name } }
+                    {"Id", new AttributeValue {S = user.Id } }
                 },
                     AttributeUpdates = new Dictionary<string, AttributeValueUpdate>
                 {
+                        {"Name", new AttributeValueUpdate
+                        {
+                            Value = new AttributeValue{ S =  user.Name },
+                            Action = AttributeAction.PUT
+                        }
+                    },
                     {"Email", new AttributeValueUpdate
                         {
                             Value = new AttributeValue{ S =  user.Email },
@@ -73,23 +79,6 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
                     }
                 }
                 };
-                //var updreq = new UpdateItemRequest()
-                //{
-                //    TableName = "TblUsers",
-                //    Key = new Dictionary<string, AttributeValue> { { "Name", new AttributeValue { S = user.Name } } },
-                //    ExpressionAttributeValues = new Dictionary<string, AttributeValue>
-                //{
-                //    { ":Email", new AttributeValue{ S = user.Email }}
-                //},
-                //    ExpressionAttributeNames = new Dictionary<string, string>
-                //{
-                //    { "#email", "Email"}
-                //},
-                //    UpdateExpression = "SET #email = :Email"
-                //};
-
-                //await client.UpdateItemAsync(updreq);
-
                 await client.UpdateItemAsync(updateRequest);
 
                 return true;
@@ -108,7 +97,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             try
             {
                 AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-                Table table = Table.LoadTable(client, "TblUsers");
+                Table table = Table.LoadTable(client, "TblUsers_");
                 Document result = await table.GetItemAsync(userId);
                 return MapUserWithPassword(result);
             }
@@ -119,7 +108,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
         }
 
-        public async Task<User> FindUserByUserName(string username)
+        public async Task<User> FindUserById(string id)
         {
             try
             {
@@ -127,13 +116,13 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
                 QueryRequest qry = new QueryRequest
                 {
-                    TableName = "TblUsers",
+                    TableName = "TblUsers_",
                     ExpressionAttributeNames = new Dictionary<string, string>
                     {
-                      { "#Name", "Name" }
+                      { "#Id", "Id" }
                     },
-                    ExpressionAttributeValues = new Dictionary<string, AttributeValue> { { ":name", new AttributeValue { S = username } } },
-                    KeyConditionExpression = "#Name = :name",
+                    ExpressionAttributeValues = new Dictionary<string, AttributeValue> { { ":id", new AttributeValue { S = id } } },
+                    KeyConditionExpression = "#Id = :id",
                 };
 
                 var result = await client.QueryAsync(qry);
@@ -164,7 +153,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
                 AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
 
                 DynamoDBContext context = new DynamoDBContext(client);
-                Table table = Table.LoadTable(client, "TblUsers");
+                Table table = Table.LoadTable(client, "TblUsers_");
 
                 //get all records
                 var conditions = new List<ScanCondition>();
@@ -179,7 +168,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
 
         }
-        public async Task<bool> DeleteUserAsync(string username)
+        public async Task<bool> DeleteUserAsync(string id)
         {
             try
             {
@@ -187,8 +176,8 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
                 DeleteItemRequest request = new DeleteItemRequest
                 {
-                    TableName = "TblUsers",
-                    Key = new Dictionary<string, AttributeValue> { { "Name", new AttributeValue { S = username } } }
+                    TableName = "TblUsers_",
+                    Key = new Dictionary<string, AttributeValue> { { "Id", new AttributeValue { S = id } } }
                 };
 
                 await client.DeleteItemAsync(request);
@@ -206,7 +195,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         private User MapUserWithPassword(Document document)
         {
-            User user = new User(document["Name"], string.Empty, document["Email"]);
+            User user = new User(document["Id"], document["Name"], string.Empty, document["Email"]);
             return user;
         }
 
@@ -215,7 +204,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
             try
             {
-                User user = new User(item["Name"].S, item["Password"].S, item["Email"].S);
+                User user = new User(item["Id"].S, item["Name"].S, item["Password"].S, item["Email"].S);
 
                 return user;
             }

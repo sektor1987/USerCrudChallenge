@@ -27,6 +27,7 @@ namespace UserCrudApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("")]
         public async Task<IActionResult> CreateUsers([FromBody] UserDTO user)
         {
@@ -39,7 +40,7 @@ namespace UserCrudApi.Controllers
 
 
         [HttpPut]
-        //[Authorize]
+        [Authorize]
         [Route("")]
         public async Task<IActionResult> UpdateUsers([FromBody] UserDTO user)
         {
@@ -51,36 +52,25 @@ namespace UserCrudApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{username}")]
-        //[Authorize]
-        public async Task<IActionResult> DeleteUsers([FromRoute] string username)
+        [Route("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUsers([FromRoute] string id)
         {
-            var response = await _userAplication.DeleteUserAsync(username);
+            var response = await _userAplication.DeleteUserAsync(id);
             return NoContent();
         }
 
         [HttpGet]
-        //[Authorize]
-        [Route("{name}")]
-        public async Task<IActionResult> FindUsersByName(string name)
+        [Authorize]
+        [Route("{id}")]
+        public async Task<IActionResult> FindUserById(string id)
         {
-            var response = await _userAplication.FindUserByUserName(name);
+            var response = await _userAplication.FindUserById(id);
             return Ok(response);
         }
 
-        /// <summary>
-        ///El método GetProfiles,  obtiene los perfiles  de la aplicación. Para poder consumir el método  debe pasar como parámetro el JWT      
-        /// </summary>        
-        /// <response code="200">OK. Devuelve el objeto solicitado.</response>        
-        /// <response code="404">NotFound. No se ha encontrado el objeto solicitado.</response>
-        /// <response code="401">Unauthorized. No se ha indicado o es incorrecto el Token JWT de acceso.</response>              
-        //[Authorize]
-        ////[AllowAnonymous]
-        //[HttpGet("GetUsers")]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[SwaggerResponse(200, "OK. Devuelve el objeto solicitado", typeof(Response<IList<ProfileDto>>))]
         [HttpGet("GetUsers")]
+        [Authorize]
         public async Task<IActionResult> GetUsers()
         {
             List<UserDTO> _response = new();
@@ -93,7 +83,7 @@ namespace UserCrudApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserCred userCred)
         {
-            var token = jWTAuthenticationManager.Authenticate(userCred.Username, userCred.Password);
+            var token = jWTAuthenticationManager.Authenticate(userCred.Email, userCred.Password);
 
             if (token == null)
                 return Unauthorized();
