@@ -73,7 +73,7 @@ namespace UserCrudApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetUsers()
         {
-            List<UserDTO> _response = new();
+            List<UserDTO> _response = new List<UserDTO>();
             _response = await _userAplication.GetUsers();
             return Ok(_response);
         }

@@ -1,4 +1,4 @@
-const SERVER_URL = "https://localhost:44338/api";
+const SERVER_URL = "https://3o26l1r5xh.execute-api.us-east-2.amazonaws.com/api";
 Vue.use(Toasted);
 new Vue({
     el: "#app",

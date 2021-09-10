@@ -11,14 +11,12 @@ namespace UserCrudApiChallenge.WebApi.Modules.Feature
         {
             string myPolicy = "Todos";
             services.AddCors(options => options.AddPolicy(myPolicy, builder => builder.WithHeaders("*").WithMethods("*").WithOrigins("*")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
-            //services.AddControllers().AddNewtonsoftJson(options =>
-            // {
-            //     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            // });
+            //     services.AddDataProtection()
+            //.PersistKeysToAWSSystemsManager("/MyApplication/DataProtection");
+   
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            //services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             return services;
         }
 

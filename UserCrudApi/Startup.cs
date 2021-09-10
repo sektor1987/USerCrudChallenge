@@ -36,6 +36,8 @@ namespace UserCrudApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+  //          services.AddDataProtection()
+  //.PersistKeysToAWSSystemsManager("/MyApplication/DataProtection");
             var tokenKey = Configuration.GetValue<string>("TokenKey");
             var key = Encoding.ASCII.GetBytes(tokenKey);
             services.AddSwagger();
@@ -70,6 +72,10 @@ namespace UserCrudApi
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddSingleton<IJWTAuthenticationManager>(x =>
                 new JWTAuthenticationManager(tokenKey, x.GetService<IRefreshTokenGenerator>()));
+            //services.AddDataProtection()
+            //.PersistKeysToAWSSystemsManager("/RegisterTest");
+   //         services.AddDataProtection()
+   //.PersistKeysToAWSSystemsManager($"/MyApp/DataProtection");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
