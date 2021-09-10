@@ -31,11 +31,21 @@ namespace UserCrudApi.Controllers
         [Route("")]
         public async Task<IActionResult> CreateUsers([FromBody] UserDTO user)
         {
-            if (user == null)
-                return BadRequest();
+            try
+            {
+                if (user == null)
+                    return BadRequest();
 
-            var response = await _userAplication.AddUserAsync(user);
-            return Ok(user);
+                var response = await _userAplication.AddUserAsync(user);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500);
+                throw;
+            }
+         
         }
 
 
