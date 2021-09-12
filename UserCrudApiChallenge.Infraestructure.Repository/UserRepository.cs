@@ -14,6 +14,7 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime;
 using Amazon;
+using Amazon.S3;
 
 namespace UserCrudApiChallenge.Infraestructure.Repository
 {
@@ -23,7 +24,9 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         public UserRepository()
         {
-            _connection =  new BasicAWSCredentials("AKIARZCKHZFCSPH72PKB", "97MalXp8LrbXwynGZFVRhy2/BMjXT2+Wf8hshxJ0");
+            _connection =  new  BasicAWSCredentials(Environment.GetEnvironmentVariable("DYNAMODB_ACCESS_KEY"),
+                Environment.GetEnvironmentVariable("DYNAMODB_SECRET_KEY"));
+
         }
 
         public async Task<User> AddUserAsync(User user)
@@ -39,7 +42,7 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine("FAILED to write the new user, because:\n       {0}.", ex.Message);
                 throw;
             }
         

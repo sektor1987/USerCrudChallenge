@@ -12,9 +12,15 @@ namespace UserCrudApiChallenge.API
 {
     public class LambdaEntryPoint : APIGatewayHttpApiV2ProxyFunction
     {
-        protected override void Init(IWebHostBuilder builder)
+        protected override void Init(IHostBuilder builder)
         {
-            builder.UseStartup<Startup>();
+            builder
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder
+                        .UseStartup<Startup>();
+                });
         }
     }
 }

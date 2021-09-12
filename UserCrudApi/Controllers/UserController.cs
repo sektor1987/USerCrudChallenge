@@ -1,4 +1,5 @@
 ﻿using Auth.Demo;
+using LoggerService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,11 +20,14 @@ namespace UserCrudApi.Controllers
         private readonly IUserAplication _userAplication;
         private readonly IJWTAuthenticationManager jWTAuthenticationManager;
         private readonly ITokenRefresher tokenRefresher;
-        public UserController(IUserAplication userAplication, IJWTAuthenticationManager jWTAuthenticationManager, ITokenRefresher tokenRefresher)
+        private ILoggerManager _logger;
+
+        public UserController(IUserAplication userAplication, IJWTAuthenticationManager jWTAuthenticationManager, ITokenRefresher tokenRefresher, ILoggerManager logger)
         {
             _userAplication = userAplication;
             this.jWTAuthenticationManager = jWTAuthenticationManager;
             this.tokenRefresher = tokenRefresher;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -33,6 +37,8 @@ namespace UserCrudApi.Controllers
         {
             try
             {
+                _logger.LogInfo("Fetching all the Students from the storage");
+
                 if (user == null)
                     return BadRequest();
 

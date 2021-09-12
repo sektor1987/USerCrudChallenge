@@ -11,9 +11,8 @@ namespace UserCrudApiChallenge.WebApi.Modules.Feature
         {
             string myPolicy = "Todos";
             services.AddCors(options => options.AddPolicy(myPolicy, builder => builder.WithHeaders("*").WithMethods("*").WithOrigins("*")));
-            //     services.AddDataProtection()
-            //.PersistKeysToAWSSystemsManager("/MyApplication/DataProtection");
-   
+       
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

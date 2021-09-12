@@ -1,4 +1,8 @@
 using Auth.Demo;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using GlobalErrorHandling.Extensions;
+using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,12 +36,13 @@ namespace UserCrudApi
         }
 
         public IConfiguration Configuration { get; }
+        public ILifetimeScope AutofacContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-  //          services.AddDataProtection()
-  //.PersistKeysToAWSSystemsManager("/MyApplication/DataProtection");
+
+
             var tokenKey = Configuration.GetValue<string>("TokenKey");
             var key = Encoding.ASCII.GetBytes(tokenKey);
             services.AddSwagger();
@@ -72,14 +77,13 @@ namespace UserCrudApi
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddSingleton<IJWTAuthenticationManager>(x =>
                 new JWTAuthenticationManager(tokenKey, x.GetService<IRefreshTokenGenerator>()));
-            //services.AddDataProtection()
-            //.PersistKeysToAWSSystemsManager("/RegisterTest");
+            services.AddSingleton<ILoggerManager, LoggerManager>();
    //         services.AddDataProtection()
-   //.PersistKeysToAWSSystemsManager($"/MyApp/DataProtection");
+   //.PersistKeysToAWSSystemsManager("/DataProtection");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
         {
 
             app.UseSwagger(c =>
@@ -94,6 +98,9 @@ namespace UserCrudApi
             });
 
             app.UseHttpsRedirection();
+            app.ConfigureCustomExceptionMiddleware();
+
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
             app.UseRouting();
             app.UseCors(myPolicy);
