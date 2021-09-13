@@ -1,8 +1,4 @@
 using Auth.Demo;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using GlobalErrorHandling.Extensions;
-using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +20,7 @@ using UserCrudApiChallenge.Application.WebApi.Modules.Injection;
 using UserCrudApiChallenge.WebApi.Modules.Feature;
 using UserCrudApiChallenge.WebApi.Modules.Mapper;
 using UserCrudApiChallenge.WebApi.Modules.Swagger;
-
+using Microsoft.Extensions.Configuration;
 namespace UserCrudApi
 {
     public class Startup
@@ -37,13 +33,10 @@ namespace UserCrudApi
         }
 
         public IConfiguration Configuration { get; }
-        public ILifetimeScope AutofacContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-
             var tokenKey = Configuration.GetValue<string>("TokenKey");
             var key = Encoding.ASCII.GetBytes(tokenKey);
             services.AddSwagger();
@@ -51,40 +44,45 @@ namespace UserCrudApi
             services.AddMapper();
             services.AddFeature(this.Configuration);
             services.AddInjection(this.Configuration);
-            //services.AddAuthentication(this.Configuration);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-          .AddJwtBearer(x =>
-          {
-              x.RequireHttpsMetadata = false;
-              x.SaveToken = true;
-              x.TokenValidationParameters = new TokenValidationParameters
-              {
-                  ValidateIssuerSigningKey = true,
-                  IssuerSigningKey = new SymmetricSecurityKey(key),
-                  ValidateIssuer = false,
-                  ValidateAudience = false,
-                  ValidateLifetime = true,
-                  //ClockSkew = TimeSpan.Zero, //Quitamos los 5 min x defecto
-                  ClockSkew = TimeSpan.FromSeconds(100000)
-              };
-          });
+         .AddJwtBearer(x =>
+         {
+             x.RequireHttpsMetadata = false;
+             x.SaveToken = true;
+             x.TokenValidationParameters = new TokenValidationParameters
+             {
+                 ValidateIssuerSigningKey = true,
+                 IssuerSigningKey = new SymmetricSecurityKey(key),
+                 ValidateIssuer = false,
+                 ValidateAudience = false,
+                 ValidateLifetime = true,
+                 //ClockSkew = TimeSpan.Zero, //Quitamos los 5 min x defecto
+                 ClockSkew = TimeSpan.FromSeconds(100000)
+             };
+
+         });
+            // Build the intermediate service provider
+            var sp = services.BuildServiceProvider();
+
+            // This will succeed.
+            var userService = sp.GetService<IUserAplication>();
 
             services.AddSingleton<ITokenRefresher>(x =>
     new TokenRefresher(key, x.GetService<IJWTAuthenticationManager>()));
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
+
+
             services.AddSingleton<IJWTAuthenticationManager>(x =>
-                new JWTAuthenticationManager(tokenKey, x.GetService<IRefreshTokenGenerator>(), x.GetService<IUserAplication>()));
-            services.AddSingleton<ILoggerManager, LoggerManager>();
-   //         services.AddDataProtection()
-   //.PersistKeysToAWSSystemsManager("/DataProtection");
+                new JWTAuthenticationManager(tokenKey, x.GetService<IRefreshTokenGenerator>(), userService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             app.UseSwagger(c =>
@@ -99,9 +97,6 @@ namespace UserCrudApi
             });
 
             app.UseHttpsRedirection();
-            app.ConfigureCustomExceptionMiddleware();
-
-            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
             app.UseRouting();
             app.UseCors(myPolicy);

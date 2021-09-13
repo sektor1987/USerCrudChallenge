@@ -1,5 +1,4 @@
 ﻿using Amazon.Lambda.AspNetCoreServer;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -15,7 +14,6 @@ namespace UserCrudApiChallenge.API
         protected override void Init(IHostBuilder builder)
         {
             builder
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder

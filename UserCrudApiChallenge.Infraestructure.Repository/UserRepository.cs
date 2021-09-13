@@ -33,24 +33,20 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
         {
             try
             {
-                Console.WriteLine("llegue al repository");
-                Console.WriteLine("llegue al repository1");
-
+              
                 AmazonDynamoDBClient client_ = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-                Console.WriteLine("llegue al repository2");
 
                 Table table = Table.LoadTable(client_, "TblUsers_");
-                Console.WriteLine("llegue al repository3");
 
                 DynamoDBContext context = new DynamoDBContext(client_);
-                Console.WriteLine("insertando");
+
                 Document result = await table.PutItemAsync(context.ToDocument(user));
 
                 return user;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("llegue al repository error: "+ex.ToString());
+
 
                 Console.WriteLine("FAILED to write the new user, because:\n       {0}.", ex.Message);
                 throw;
