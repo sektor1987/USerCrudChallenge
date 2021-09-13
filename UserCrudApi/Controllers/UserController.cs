@@ -99,12 +99,12 @@ namespace UserCrudApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserCred userCred)
         {
-            var token = jWTAuthenticationManager.Authenticate(userCred.Email, userCred.Password);
+            var token = jWTAuthenticationManager.AuthenticateAsync(userCred.Email, userCred.Password);
 
             if (token == null)
                 return Unauthorized();
 
-            return Ok(token);
+            return Ok(token.Result);
         }
 
         [AllowAnonymous]

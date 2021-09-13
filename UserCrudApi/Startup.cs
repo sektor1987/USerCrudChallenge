@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UserCrudApiChallenge.Application.Interface;
 using UserCrudApiChallenge.Application.WebApi.Modules.Injection;
 using UserCrudApiChallenge.WebApi.Modules.Feature;
 using UserCrudApiChallenge.WebApi.Modules.Mapper;
@@ -76,7 +77,7 @@ namespace UserCrudApi
     new TokenRefresher(key, x.GetService<IJWTAuthenticationManager>()));
             services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
             services.AddSingleton<IJWTAuthenticationManager>(x =>
-                new JWTAuthenticationManager(tokenKey, x.GetService<IRefreshTokenGenerator>()));
+                new JWTAuthenticationManager(tokenKey, x.GetService<IRefreshTokenGenerator>(), x.GetService<IUserAplication>()));
             services.AddSingleton<ILoggerManager, LoggerManager>();
    //         services.AddDataProtection()
    //.PersistKeysToAWSSystemsManager("/DataProtection");

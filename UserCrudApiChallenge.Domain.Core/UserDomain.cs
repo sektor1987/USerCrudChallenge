@@ -28,6 +28,12 @@ namespace UserCrudApiChallenge.Domain.Core
             User result = await _userRepository.FindUserByIdAsync(userId);
             return result;
         }
+
+        public async Task<bool> ValidateUserLogin(string email, string password)
+        {
+            bool result = await _userRepository.ValidateUserLogin(email, password);
+            return result;
+        }
         public async Task<bool> DeleteUserAsync(string id) {
             bool result = await _userRepository.DeleteUserAsync(id);
             return result;

@@ -5,34 +5,33 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using UserCrudApiChallenge.Application.Interface;
 
 namespace Auth.Demo
 {
     public interface IJWTAuthenticationManager
     {
-        AuthenticationResponse Authenticate(string username, string password);
+        System.Threading.Tasks.Task<AuthenticationResponse> AuthenticateAsync(string username, string password);
         IDictionary<string, string> UsersRefreshTokens { get; set; }
         AuthenticationResponse Authenticate(string username, Claim[] claims);
     }
 
     public class JWTAuthenticationManager : IJWTAuthenticationManager
     {
-        IDictionary<string, string> users = new Dictionary<string, string>
-        {
-            { "test@test.cl", "123" },
-            { "test2", "password2" }
-        };
+      
 
         public IDictionary<string, string> UsersRefreshTokens { get; set; }
-
+        private readonly IUserAplication _userAplication;
         private readonly string tokenKey;
         private readonly IRefreshTokenGenerator refreshTokenGenerator;
 
-        public JWTAuthenticationManager(string tokenKey, IRefreshTokenGenerator refreshTokenGenerator)
+        public JWTAuthenticationManager(string tokenKey, IRefreshTokenGenerator refreshTokenGenerator, IUserAplication userAplication)
         {
             this.tokenKey = tokenKey;
             this.refreshTokenGenerator = refreshTokenGenerator;
             UsersRefreshTokens = new Dictionary<string, string>();
+            _userAplication = userAplication;
+
         }
 
         public AuthenticationResponse Authenticate(string username, Claim[] claims)
@@ -56,9 +55,11 @@ namespace Auth.Demo
             };
         }
 
-        public AuthenticationResponse Authenticate(string username, string password)
+        public async System.Threading.Tasks.Task<AuthenticationResponse> AuthenticateAsync(string username, string password)
         {
-            if (!users.Any(u => u.Key == username && u.Value == password))
+             bool exist = await _userAplication.ValidateUserLogin(username, password);
+
+            if (!exist)
             {
                 return null;
             }

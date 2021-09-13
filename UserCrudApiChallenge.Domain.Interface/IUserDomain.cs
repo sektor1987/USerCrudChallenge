@@ -12,6 +12,7 @@ namespace UserCrudApiChallenge.Domain.Interface
         Task<User> FindUserByIdAsync(string userId);
         Task<bool> DeleteUserAsync(string id);
         Task<User> FindUserById(string id);
+        Task<bool> ValidateUserLogin(string email, string password);
         Task<List<User>> GetUsers();
     }
 }

@@ -33,15 +33,25 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
         {
             try
             {
+                Console.WriteLine("llegue al repository");
+                Console.WriteLine("llegue al repository1");
+
                 AmazonDynamoDBClient client_ = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+                Console.WriteLine("llegue al repository2");
+
                 Table table = Table.LoadTable(client_, "TblUsers_");
+                Console.WriteLine("llegue al repository3");
+
                 DynamoDBContext context = new DynamoDBContext(client_);
+                Console.WriteLine("insertando");
                 Document result = await table.PutItemAsync(context.ToDocument(user));
 
                 return user;
             }
             catch (Exception ex)
             {
+                Console.WriteLine("llegue al repository error: "+ex.ToString());
+
                 Console.WriteLine("FAILED to write the new user, because:\n       {0}.", ex.Message);
                 throw;
             }
@@ -109,6 +119,36 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
                 throw;
             }
+        }
+
+        public async Task<bool> ValidateUserLogin(string email, string password)
+        {
+
+            try
+            {
+                bool validate = true;
+                AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
+
+                DynamoDBContext context = new DynamoDBContext(client);
+                Table table = Table.LoadTable(client, "TblUsers_");
+
+                //get all records
+                var conditions = new List<ScanCondition>();
+                // you can add scan conditions, or leave empty
+                List<User> allUsers = await context.ScanAsync<User>(conditions).GetRemainingAsync();
+
+                User user_ = allUsers.Where(x => x.Email == email && x.Password == password).FirstOrDefault();
+
+                validate = user_ == null ? false : true;
+
+                return validate;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
 
         public async Task<User> FindUserById(string id)

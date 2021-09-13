@@ -65,6 +65,13 @@ namespace UserCrudApiChallenge.Application.Main
             return userDTO;
         }
 
+        public async Task<bool> ValidateUserLogin(string email, string password)
+        {
+#warning falta validar si es null
+            Task<bool> validateUser = _userDomain.ValidateUserLogin(email, _managerEncryptDecrypt.Encrypt(password));
+            return await validateUser;
+        }
+
         public async Task<List<UserDTO>> GetUsers()
         {
             List<UserDTO> lstUserDto = new List<UserDTO>();

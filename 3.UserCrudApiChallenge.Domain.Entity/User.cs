@@ -12,7 +12,6 @@ namespace UserCrudApiChallenge.Domain.Entity
         [DynamoDBHashKey]
         public string Id { get; set; }
         public string Name { get; set; }
-        //[DynamoDBRangeKey]
         public string Password { get;  set; }
         public string Email { get;  set; }
 
