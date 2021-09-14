@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Transactions;
-using UserCrudApiChallenge.Infraestructure.Interface;
-using UserCrudApiChallenge.CrossCutting.User;
-using UserCrudApiChallenge.Domain.Entity;
+﻿using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime;
-using Amazon;
-using Amazon.S3;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using UserCrudApiChallenge.Domain.Entity;
+using UserCrudApiChallenge.Infraestructure.Interface;
 
 namespace UserCrudApiChallenge.Infraestructure.Repository
 {
@@ -24,34 +20,30 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         public UserRepository()
         {
-            _connection =  new  BasicAWSCredentials(Environment.GetEnvironmentVariable("DYNAMODB_ACCESS_KEY"),
-                Environment.GetEnvironmentVariable("DYNAMODB_SECRET_KEY"));
-
+            _connection = new BasicAWSCredentials("AKIARZCKHZFCSPH72PKB", "97MalXp8LrbXwynGZFVRhy2/BMjXT2+Wf8hshxJ0");
         }
 
         public async Task<User> AddUserAsync(User user)
         {
             try
             {
-              
                 AmazonDynamoDBClient client_ = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
-
+                Console.WriteLine(_connection.GetCredentials().AccessKey);
+                Console.WriteLine(_connection.GetCredentials().SecretKey);
+                Console.WriteLine(_connection.GetCredentials().Token);
                 Table table = Table.LoadTable(client_, "TblUsers_");
-
                 DynamoDBContext context = new DynamoDBContext(client_);
-
                 Document result = await table.PutItemAsync(context.ToDocument(user));
 
                 return user;
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine("llegue al repository error: " + ex.ToString());
 
                 Console.WriteLine("FAILED to write the new user, because:\n       {0}.", ex.Message);
                 throw;
             }
-        
         }
 
         public async Task<bool> UpdateUserAsync(User user)
@@ -94,15 +86,12 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-     
         }
 
         public async Task<User> FindUserByIdAsync(string userId)
         {
-
             try
             {
                 AmazonDynamoDBClient client = new AmazonDynamoDBClient(_connection, RegionEndpoint.USEast2);
@@ -112,14 +101,12 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
 
         public async Task<bool> ValidateUserLogin(string email, string password)
         {
-
             try
             {
                 bool validate = true;
@@ -141,10 +128,8 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-
         }
 
         public async Task<User> FindUserById(string id)
@@ -171,19 +156,13 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
                     throw new Exception("No user");
                 }
 
-
-
                 return UsersMapper(result.Items.FirstOrDefault());
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-
         }
-
-
 
         public async Task<List<User>> GetUsers()
         {
@@ -202,11 +181,10 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-
         }
+
         public async Task<bool> DeleteUserAsync(string id)
         {
             try
@@ -225,12 +203,9 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-       
         }
-
 
         private User MapUserWithPassword(Document document)
         {
@@ -240,7 +215,6 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
 
         private User UsersMapper(Dictionary<string, AttributeValue> item)
         {
-
             try
             {
                 User user = new User(item["Id"].S, item["Name"].S, item["Password"].S, item["Email"].S);
@@ -249,11 +223,8 @@ namespace UserCrudApiChallenge.Infraestructure.Repository
             }
             catch (Exception ex)
             {
-
                 throw;
             }
-
         }
     }
-
 }

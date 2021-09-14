@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using UserCrudApiChallenge.WebApi.Modules.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace UserCrudApiChallenge.WebApi.Modules.Swagger
 {

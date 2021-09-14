@@ -1,10 +1,11 @@
 ﻿
 using Auth.Demo;
 using LoggerService;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+//using LoggerService;
+//using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+//using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using UserCrudApiChallenge.Application.Interface;
@@ -14,6 +15,7 @@ using UserCrudApiChallenge.Domain.Interface;
 using UserCrudApiChallenge.Infraestructure.Interface;
 using UserCrudApiChallenge.Infraestructure.Repository;
 using UserCrudChallenge.CrossCutting.Common;
+
 
 namespace UserCrudApiChallenge.Application.WebApi.Modules.Injection
 {

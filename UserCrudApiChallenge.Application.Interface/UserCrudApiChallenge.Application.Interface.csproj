@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\3.UserCrudApiChallenge.Domain.Entity\UserCrudApiChallenge.Domain.Entity.csproj" />
     <ProjectReference Include="..\UserCrudApiChallenge.Application.DTO\UserCrudApiChallenge.Application.DTO.csproj" />
+    <ProjectReference Include="..\UserCrudApiChallenge.Domain.Entity\UserCrudApiChallenge.Domain.Entity.csproj" />
   </ItemGroup>
 
 </Project>

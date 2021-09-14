@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 
 namespace UserCrudApiChallenge.WebApi.Modules.Feature
 {

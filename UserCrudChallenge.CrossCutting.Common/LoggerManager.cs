@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using NLog;
+﻿using NLog;
 
 namespace LoggerService
 {
